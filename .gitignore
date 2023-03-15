@@ -1,4 +1,4 @@
 *.ipynb
 *.jpeg
 *.png
-.idea
+.idea/*
