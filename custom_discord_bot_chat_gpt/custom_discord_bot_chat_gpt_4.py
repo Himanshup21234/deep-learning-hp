@@ -27,7 +27,7 @@ class ChatBot(discord.Client):
             return
         input_content = [message.content]
         print(message.content)
-        for text in ['/ai', '/chatgpt', '/bot']:
+        for text in ['/hpAi', '/chatGpt', '/hpBot']:
             # For gpt 4
             if message.attachments:
                 for attachment in message.attachments:
