@@ -37,9 +37,9 @@ class ChatBot(discord.Client):
             response = openai.Completion.create(
                 #                 response = openai.ChatCompletion.create(
                 model="code-cushman-001",
-                temperature=0.1,
-                max_tokens=100,
-                top_p=0.05,
+                temperature=0.001,
+                max_tokens=500,
+                top_p=0.005,
                 frequency_penalty=0,
                 presence_penalty=0,
                 prompt=msg[0]
