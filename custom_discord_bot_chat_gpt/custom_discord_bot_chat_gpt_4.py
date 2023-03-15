@@ -25,28 +25,38 @@ class ChatBot(discord.Client):
     async def on_message(self, message):
         if message.author == self.user:
             return
-        input_content = [message.content]
-        print(message.content)
+        cmd, msg, assistant_response = None, None, "Start by using any one of the following query: \n/hpAi\n/chatGpt\n/hpBot"
+        #print(message.content)
+        msg = [message.content]
+        # For gpt 4
+        # if message.attachments:
+        #     for attachment in message.attachments:
+        #         image_bytes = await attachment.read()
+        #         msg.append({"image": image_bytes})
+
         for text in ['/hpAi', '/chatGpt', '/hpBot']:
-            # For gpt 4
-            if message.attachments:
-                for attachment in message.attachments:
-                    image_bytes = await attachment.read()
-                    input_content.append({"image": image_bytes})
-            if input_content[0].startswith(text):
-                input_content[0] = input_content[0].replace(text, '')
-                response = openai.Completion.create(
-                    model="code-cushman-001",
-                    temperature=0.7,
-                    max_tokens=100,
-                    top_p=1,
-                    frequency_penalty=0,
-                    presence_penalty=0,
-                    prompt=input_content[0]
-                )
-                assistant_response = response['choices'][0]['text']
-                print(assistant_response)
-                await message.channel.send(assistant_response)
+            if msg[0].startswith(text):
+                msg[0] = msg[0].replace(text, '')
+                msg[0] = msg[0].strip()
+                cmd = text
+        print(cmd, msg)
+        if cmd in ['/hpAi', '/chatGpt', '/hpBot']:
+            response = openai.Completion.create(
+                #                 response = openai.ChatCompletion.create(
+                model="code-cushman-001",
+                # gpt-3.5-turbo,text-curie-001, code-cushman-001, code-davinci-002,text-davinci-003
+                temperature=0.1,
+                max_tokens=100,
+                top_p=0.05,
+                frequency_penalty=0,
+                presence_penalty=0,
+                prompt=msg[0]
+                #                             message=[{"role":"user","content":input_content}]
+            )
+            #                 assistant_response = response['choices'][0]['message']['content']
+            assistant_response = response['choices'][0]['text']
+        #         print(assistant_response)
+        await message.channel.send(assistant_response)
 
 
 client = ChatBot(intents=intents)
